@@ -1,0 +1,52 @@
+<style>
+    .alert{
+            visibility: hidden;
+        }
+    </style>
+<div class="alert alert-danger" role="alert" id="alert"></div>
+<div class="form-group">
+    <label for="exampleInputEmail1">用户名</label>
+    <input id="username" name="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+        placeholder="Enter username">
+
+</div>
+<div class="form-group">
+    <label for="exampleInputPassword1">密码</label>
+    <input id="password" name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    <small id="emailHelp" class="form-text text-muted">至少需要8个字符</small>
+</div>
+<div class="form-group">
+    <label for="exampleInputPassword1">再次确认密码</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+</div>
+<div class="form-group">
+    <label for="exampleInputEmail1">邮箱</label>
+    <input id="email" name="email" type="email" class="form-control" id="exampleInputPassword1" placeholder="Email Address">
+
+</div>
+
+<button id="submit" class="btn btn-primary">提交</button>
+
+<script>
+    $("#submit").bind("click", function () {
+        data = {
+            "username": $("#username").val(),
+            "password": $("#password").val(),
+            "email": $("#email").val()
+        }
+
+        $.ajax({
+            url: "/signup",
+            type: "POST",
+            data: JSON.stringify(data),
+            success: function (data) {
+                if (data.res['status'] == 500) {
+                    $("#alert").css("visibility", "visible")
+                    $("#alert").html(data.res['msg'])
+                } else {
+                    window.location.href = '/'
+                }
+            }
+        })
+    })
+</script>
