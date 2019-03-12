@@ -1,0 +1,58 @@
+<div id="main-content" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2" id="content-title">新增项目</h1>
+</div>
+<div>
+    <div class="alert alert-danger" role="alert" id="alert"></div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">名称</span>
+        </div>
+        <input type="text" class="form-control" id="project-title" aria-describedby="basic-addon3">
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">描述</span>
+        </div>
+        <textarea class="form-control" aria-label="With textarea" id="project-description"></textarea>
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">是否公开 <input id="project-is_public" type="checkbox" aria-label="Checkbox for following text input">
+            </span>
+        </div>
+    </div>
+    <div class="btn btn-primary" id="submit">创建</div>
+</div>
+
+<script>
+    $("#submit").bind('click',function(){
+        var name = $('#project-title').val()
+        var description = $("#project-description").val()
+        var is_public = $("#project-is_public").is(':checked')
+        if(name == ""){
+            $("#alert").css("visibility", "visible")
+            $("#alert").html("项目名不能为空!")
+        }
+        else{
+            data = {
+                'name' : name,
+                'description' : description,
+                'is_public' : is_public
+            };
+            console.log(data)
+            $.ajax({
+            url: "/new_project",
+            type: "POST",
+            data: JSON.stringify(data),
+            success: function (data) {
+                if (data.res['status'] == 500) {
+                    $("#alert").css("visibility", "visible")
+                    $("#alert").html(data.res['msg'])
+                } else {
+                    setActiveTag('#project')
+                }
+            }
+        })
+        }
+    })
+</script>

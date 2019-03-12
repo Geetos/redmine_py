@@ -2,9 +2,9 @@ from . import main
 from flask import render_template, session, jsonify
 
 
-@main.route('/')
+@main.route('/homepage')
 def welcome():     
-    return render_template('welcome.html')
+    return render_template('homepage.html')
 
 @main.route('/hasLogin')
 def hasLogin():

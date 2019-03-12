@@ -1,0 +1,48 @@
+<style>
+    .hide-item {
+        display: none;
+    }
+</style>
+<div id="main-content" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2" id="content-title">项目</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <button class="btn btn-sm btn-outline-secondary" id="new_project">
+            <span data-feather="calendar"></span>
+            新增项目 <i class="fa fa-plus-square-o"></i>
+        </button>
+    </div>
+</div>
+<div>
+    <div class="list-group" id="project-list">
+        <a href="#" class="hide-item list-group-item list-group-item-action flex-column align-items-start" attr_id=""
+            id="project-item">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1" id="project-title"></h5>
+                <small id="project-time"></small>
+            </div>
+            <p class="mb-1" id="project-description"></p>
+            <small id="project-status"></small>
+        </a>
+    </div>
+</div>
+<script>
+    (function () {
+        $.get('/get_projects', function (data) {
+            data = data.res
+            data.forEach(v => {
+                var item = $("#project-item").clone()
+                item.find("#project-title").text(v.name)
+                item.find("#project-time").text(v.created_on)
+                item.find("#project-description").text(v.description)
+                item.find("#project-status").text(v.status)
+                item.attr("attr_id", v.id)
+                item.removeClass("hide-item")
+                item.appendTo("#project-list")
+            });
+        })
+    })();
+
+    $("#new_project").bind("click",function(){
+        $("#main-content").load('/new_project')
+    })
+</script>
