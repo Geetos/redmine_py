@@ -16,9 +16,20 @@ class Project(db.Model):
     is_public      = db.Column(db.Boolean)
     created_on     = db.Column(db.Date)
     status         = db.Column(db.Integer)
-    
-class Issue(db.Model):
-    __table__name  = 'issue'
+
+class Tracker(db.Model):
+    __table__name  = 'tracker'
+    id             = db.Column(db.Integer, primary_key=True)
+    name           = db.Column(db.String(45))
+
+class Projects_tracker(db.Model):
+    __table__name  = 'projects_tracker'
+    project_id     = db.Column(db.Integer)
+    tracker_id     = db.Column(db.Integer)
+
+
+class Progress(db.Model):
+    __table__name  = 'Progress'
     id             = db.Column(db.Integer, primary_key=True)
     tracker_id     = db.Column(db.Integer)
     project_id     = db.Column(db.Integer)
