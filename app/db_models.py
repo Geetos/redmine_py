@@ -24,6 +24,7 @@ class Tracker(db.Model):
 
 class Projects_tracker(db.Model):
     __table__name  = 'projects_tracker'
+    id             = db.Column(db.Integer, primary_key=True)
     project_id     = db.Column(db.Integer)
     tracker_id     = db.Column(db.Integer)
 

@@ -1,0 +1,100 @@
+<style>
+    .hide-page{
+        display: none;
+    }
+</style>
+<div id="main-content" class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+    <h1 class="h2" id="progress-title"></h1>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" id="outline">概述</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="activities">活动</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="progress">进度</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="settings">配置</a>
+        </li>
+    </ul>
+</div>
+<div id="tab-page">
+    <div id="outline" class="">outline</div>
+    <div id="activities" class="hide-page">activities</div>
+    <div id="progress" class="hide-page">progress</div>
+    <div id="settings" class="hide-page">
+        <div class="alert alert-danger" role="alert" id="alert"></div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">名称</span>
+            </div>
+            <input type="text" class="form-control" id="project-title" aria-describedby="basic-addon3">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">描述</span>
+            </div>
+            <textarea class="form-control" aria-label="With textarea" id="project-description"></textarea>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">是否公开 <input id="project-is_public" type="checkbox" aria-label="Checkbox for following text input">
+                </span>
+            </div>
+        </div>
+        <div class="btn btn-primary" id="submit">保存</div>
+    </div>
+</div>
+<script>
+    var navTabsList = ['#outline', '#activities', '#progress', '#settings']
+    var activeNavTab = '#outline'
+    var URL = '/project/' + global_variables['focused_project'] + '/';
+    
+    (function () {
+        $('#progress-title').html(global_variables['focused_project'])
+
+        navTabsList.forEach(tag => {
+            $(tag).bind('click', function () {
+                if (activeNavTab == tag) return;
+                $(activeNavTab).removeClass('active')
+                $(tag).addClass('active')
+                $('#tab-page ' + activeNavTab).addClass('hide-page')
+                $('#tab-page ' + tag).removeClass('hide-page')
+                activeNavTab = tag
+
+                switch(tag)
+                {
+                    case navTabsList[0]: loadOutline();break;
+                    case navTabsList[1]: loadActivities();break;
+                    case navTabsList[2]: loadProgress();break;
+                    case navTabsList[3]: loadSettinges();break;
+                }
+            })
+        });
+
+        
+    })();
+
+    function loadSettinges(){
+        $.get(URL + 'settings',function(data){
+            data = data.res
+            $('#settings #project-title').val(data.name)
+            $('#settings #project-description').val(data.description)
+            $('#settings #project-is_public').prop('checked',data.is_public ? 'checked' : '')
+        })
+    }
+
+    function loadProgress(){
+
+    }
+
+    function loadActivities(){
+
+    }
+
+    function loadOutline(){
+
+    }
+</script>

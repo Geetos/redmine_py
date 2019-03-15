@@ -2,6 +2,10 @@
     .hide-item {
         display: none;
     }
+
+    .list-group-item:hover{
+        background-color:#d1d1d1;
+    }
 </style>
 <div id="main-content" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2" id="content-title">项目</h1>
@@ -36,6 +40,10 @@
                 item.find("#project-status").text(v.status)
                 item.removeClass("hide-item")
                 item.appendTo("#project-list")
+                item.bind('click',function(){
+                    global_variables['focused_project'] = v.name
+                    $('#main-content').load('/project/'+v.name)
+                })
             });
         })
     })();

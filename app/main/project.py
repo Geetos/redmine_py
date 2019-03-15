@@ -1,4 +1,4 @@
-from flask import render_template, jsonify, request,session, json
+from flask import render_template, jsonify, request,session, json, abort
 from ..db_models import Project, Tracker, Projects_tracker
 from . import main
 from .. import db
@@ -6,13 +6,27 @@ import datetime
 
 class _Project:
     def __init__(self, name):
-        self.name = name
+        self.project = Project.query.filter_by(name = name).first()
 
-    def get_project(self):
-        project = Project.query.filter_by(name = project_name).first()
-        return project
+    def hasExisted(self):
+        if self.project:
+            return True
+        return False
 
-    def 
+    def getProgress(self):
+        pass
+    
+    def progressMap(self):
+        pass
+    
+    def getProp(self):
+        return {
+            "name" : self.project.name,
+            "description" : self.project.description,
+            "is_public" : self.project.is_public,
+            "created_on" : self.project.created_on,
+            "status" : self.project.status
+        }
 
 @main.route('/project')
 def project_show():
@@ -55,15 +69,16 @@ def new_project():
             name = 'tracker_' + rec['name']
         )
 
-        db.session.add(new_project, new_tracker)
+        db.session.add(new_project)
+        db.session.add(new_tracker)
         db.session.commit()
         
         new_projects_tracker = Projects_tracker(
             project_id = new_project.id,
-            tracker_id = new_tracker
+            tracker_id = new_tracker.id
         )
 
-        db.session.add(new_tracker)
+        db.session.add(new_projects_tracker)
         db.session.commit()
 
         res = {
@@ -74,7 +89,7 @@ def new_project():
     else:
         res = {
             'status' : 500,
-            'msg' : '项目名重复'.html", error_info = "Unable to find the project named " + project_name)
+            'msg' : '项目名重复'
         }
 
     return jsonify(res = res)
@@ -83,17 +98,30 @@ def new_project():
 @main.route('/project/<project_name>')
 def project_outline_page(project_name):
     project = _Project(project_name)
-    this_project = _Project.get_project()
-
-    if not this_project:
-        return render_template("404.html", error_info = "Unable to find the project named " + project_name)
-    # tracker
+    if not project.hasExisted:
+        return abort(404)
     return render_template("project_outline.html")
 
 @main.route('/project/<project_name>/outline')
-def project_outline():
-    pass
+def project_outline(project_name):
+    project = _Project(project_name)
+   
+    return None
 
 @main.route('/project/<project_name>/progress')
+def project_progress():
+    project = _Project(project_name)
+    return None
+
+@main.route('/project/<project_name>/settings')
+def project_settings(project_name):
+    project = _Project(project_name)
+    print (project.getProp())
+    return jsonify(res = project.getProp())
+
+@main.route('/project/<project_name>/activities')
+def project_activities():
+    return None
+
 
     

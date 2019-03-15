@@ -42,7 +42,7 @@
         <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="#" id="roll" hasLogin="false">登入</a>
+                <a class="nav-link" href="#" id="roll">登入</a>
             </li>
         </ul>
     </nav>
@@ -208,22 +208,28 @@
 <script src='../static/js/feather.js'></script>
 <script src='../static/js/jquery-3.3.1.min.js'></script>
 <script>
+    var global_variables = {
+        "hasLogined" : false,
+        "user_info" : "",
+        "focused_project" : "" 
+    }
+
+    var activeTag = '#homepage';
+    
+    var tagList = ['#homepage','#workstation','#project','#manage','#help'];
 
     (function () {
         $.get("/hasLogin", function (data) {
             if (data.res['status'] == 200) {
-                $("#roll").attr("hasLogin", "true")
-                $("#roll").html(data.res['user_info']['username'] + "登出")
+                global_variables['hasLogined'] = true
+                global_variables['user_info'] = data.res['user_info']
+                $("#roll").html(global_variables['user_info']['username'] + "登出")
             }
         })
         
         $('#main-content').load('/homepage')
         
     })();
-
-    var activeTag = '#homepage';
-    
-    var tagList = ['#homepage','#workstation','#project','#manage','#help'];
 
     function setActiveTag(tag){
         $(activeTag).removeClass('active')
@@ -240,7 +246,7 @@
     });
 
     $('#roll').bind("click", function () {
-        if ($("#roll").attr("hasLogin") == "false"){
+        if (!global_variables['hasLogined']){
             $('#main-content').load('/signin')
         }
         else $.get("/signout", function () {
