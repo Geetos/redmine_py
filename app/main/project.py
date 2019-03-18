@@ -105,18 +105,18 @@ def project_outline_page(project_name):
 @main.route('/project/<project_name>/outline')
 def project_outline(project_name):
     project = _Project(project_name)
-   
+    
     return None
 
 @main.route('/project/<project_name>/progress')
 def project_progress():
     project = _Project(project_name)
+    
     return None
 
 @main.route('/project/<project_name>/settings')
 def project_settings(project_name):
     project = _Project(project_name)
-    print (project.getProp())
     return jsonify(res = project.getProp())
 
 @main.route('/project/<project_name>/activities')
